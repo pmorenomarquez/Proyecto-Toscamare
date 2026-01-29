@@ -1,0 +1,27 @@
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+/*Fijar header en la parte superior de la página*/
+header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1000; /* para que quede por encima del contenido */
+}
+body {
+  padding-top: 80px;
+}
+
+#root {
+  height: 100%;
+}
+
+.app-container {
+  min-height: 100vh;      /* ocupa toda la pantalla */
+  display: flex;
+  flex-direction: column; /* header arriba, footer abajo */
+}
