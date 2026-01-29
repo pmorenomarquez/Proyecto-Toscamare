@@ -26,8 +26,10 @@ function Footer({ links }: FooterProps) {
             src="/public/logoToscamare/icono-toscamare-blanco.webp"
             alt="Toscamare "
           />
-          <p className="txt-footer">Distribuidor y venta de alimentos al por mayor y al por menor con
-            sede en Cartaya, Huelva.</p>
+          <p className="txt-footer">
+            Distribuidor y venta de alimentos al por mayor y al por menor con
+            sede en Cartaya, Huelva.
+          </p>
         </div>
 
         <div className="footer-menu">
@@ -63,25 +65,33 @@ function Footer({ links }: FooterProps) {
             administracion@cialtoscamare.es
           </p>
 
-          <br />         
+          <br />
           <p className="titulo-footer">Estamos en redes sociales</p>
           <div className="footer-social">
-            <a href="https://www.facebook.com/toscanocongelados" aria-label="Facebook" target="_blank" rel="noopener noreferrer">
+            <a
+              href="https://www.facebook.com/toscanocongelados"
+              aria-label="Facebook"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
               <FaFacebookF />
             </a>
-            <a href="https://www.instagram.com/toscamare" aria-label="Instagram"  target="_blank" rel="noopener noreferrer">
+            <a
+              href="https://www.instagram.com/toscamare"
+              aria-label="Instagram"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
               <FaInstagram />
             </a>
           </div>
-
-
-
         </div>
       </div>
 
       <div className="footer-bottom">
-        <span>{new Date().getFullYear()} © Toscamare - Todos los derechos reservados</span>
-
+        <span>
+          {new Date().getFullYear()} © Toscamare - Todos los derechos reservados
+        </span>
 
         {/*
         <div className="footer-social">
@@ -94,8 +104,6 @@ function Footer({ links }: FooterProps) {
         </div>
         */}
       </div>
-
-
     </footer>
   );
 }
