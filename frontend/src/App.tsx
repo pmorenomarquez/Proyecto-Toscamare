@@ -2,14 +2,15 @@ import "./App.css";
 import Footer from "./layout/Footer";
 import Header from "./layout/Header";
 import Inicio from "./pages/inicio/Incio";
+import AvisoLegal from "./pages/avisoLegal/AvisoLegal";
+import Cookies from "./pages/cookies/Cookies";
 
 function App() {
-
   const linksHeader = {
     inicio: "Inicio",
     sobreNosotros: "Sobre Nosotros",
     tiendas: "Tiendas",
-    contacto: "Contacto"
+    contacto: "Contacto",
   };
 
   const linksFooter = {
@@ -17,8 +18,8 @@ function App() {
     sobreNosotros: "Sobre Nosotros",
     tiendas: "Tiendas",
     contacto: "Contacto",
-    avisoLegal: "Aviso Legal"
-
+    avisoLegal: "Aviso Legal",
+    cookies: "Cookies",
   };
 
   return (
@@ -27,7 +28,6 @@ function App() {
       <Inicio />
       <Footer links={linksFooter}></Footer>
     </div>
-   
   );
 }
 
