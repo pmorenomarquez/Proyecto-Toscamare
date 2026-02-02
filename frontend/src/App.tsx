@@ -1,32 +1,17 @@
 import "./App.css";
-import { useEffect } from "react";
-import AOS from "aos";
-import "aos/dist/aos.css";
-
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Footer from "./layout/Footer";
 import Header from "./layout/Header";
-import Inicio from "./pages/inicio/Incio";
-import AvisoLegal from "./pages/avisoLegal/AvisoLegal";
-import Cookies from "./pages/cookies/Cookies";
+import Inicio from "./pages/inicio/Inicio";
+import ContactoPage from "./pages/Contacto";
 
 function App() {
-  if ("scrollRestoration" in history) {
-    // eslint-disable-next-line react-hooks/immutability
-    history.scrollRestoration = "manual";
-  }
-  useEffect(() => {
-    AOS.init({
-      duration: 300,
-      once: false,
-      offset: 100,
-    });
-  }, []);
 
   const linksHeader = {
     inicio: "Inicio",
     sobreNosotros: "Sobre Nosotros",
     tiendas: "Tiendas",
-    contacto: "Contacto",
+    contacto: "Contacto"
   };
 
   const linksFooter = {
@@ -34,18 +19,24 @@ function App() {
     sobreNosotros: "Sobre Nosotros",
     tiendas: "Tiendas",
     contacto: "Contacto",
-    avisoLegal: "Aviso Legal",
-    cookies: "Cookies",
+    avisoLegal: "Aviso Legal"
+
   };
 
   return (
-    <>
-      <Header links={linksHeader}></Header>
-      <Inicio />
-      <Footer links={linksFooter}></Footer>
-      <AvisoLegal />
-      <Cookies />
-    </>
+    <BrowserRouter>
+      <div className="app-container">
+        <Header links={linksHeader} />
+        
+        <Routes>
+          <Route path="/inicio" element={<Inicio />} />
+          <Route path="/contacto" element={<ContactoPage />} />
+          {/* Añade más rutas según tus páginas */}
+        </Routes>
+        
+        <Footer links={linksFooter} />
+      </div>
+    </BrowserRouter>
   );
 }
 
