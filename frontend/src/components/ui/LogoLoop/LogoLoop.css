@@ -129,7 +129,7 @@
 
 .logoloop--fade::before {
   left: 0;
-  background: linear-gradient(
+  background-image: linear-gradient(
     to right,
     var(--logoloop-fadeColor, var(--logoloop-fadeColorAuto)) 0%,
     rgba(0, 0, 0, 0) 100%
@@ -138,7 +138,7 @@
 
 .logoloop--fade::after {
   right: 0;
-  background: linear-gradient(
+  background-image: linear-gradient(
     to left,
     var(--logoloop-fadeColor, var(--logoloop-fadeColorAuto)) 0%,
     rgba(0, 0, 0, 0) 100%
@@ -156,7 +156,7 @@
 .logoloop--vertical.logoloop--fade::before {
   top: 0;
   bottom: auto;
-  background: linear-gradient(
+  background-image: linear-gradient(
     to bottom,
     var(--logoloop-fadeColor, var(--logoloop-fadeColorAuto)) 0%,
     rgba(0, 0, 0, 0) 100%
@@ -166,7 +166,7 @@
 .logoloop--vertical.logoloop--fade::after {
   bottom: 0;
   top: auto;
-  background: linear-gradient(
+  background-image: linear-gradient(
     to top,
     var(--logoloop-fadeColor, var(--logoloop-fadeColorAuto)) 0%,
     rgba(0, 0, 0, 0) 100%
