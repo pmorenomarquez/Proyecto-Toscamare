@@ -3,93 +3,81 @@ header {
   top: 0;
   left: 0;
   width: 100%;
-  z-index: 1000; /* para que quede por encima del contenido */
+  z-index: 100; /* para que quede por encima del contenido */
 }
-body {
-  padding-top: 80px;
-}
-
 
 .header-menu {
-    height: 70px;
-    padding: 5px 20px;
-    align-items: center;
-    background-color: #F2F2F2;
-    color: #011468;
-    font-size: 15px;
-
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+  height: 70px;
+  padding: 5px 20px;
+  align-items: center;
+  background-color: #f2f2f2;
+  color: #011468;
+  font-size: 15px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .title {
-    margin: 0;
-    padding: 20px;
-    text-align: center;
+  margin: 0;
+  padding: 20px;
+  text-align: center;
 }
 
-.header-logo, 
-.header-nav, 
+.header-logo,
+.header-nav,
 .header-shop {
-    height: 100%;
-    flex: 1; 
+  height: 100%;
+  flex: 1;
 }
 
 .header-logo {
-    display: flex;
-    height: 80px;
-    width: auto;
-   
+  display: flex;
+  height: 80px;
+  width: auto;
 }
 
 .header-nav {
-    display: flex;
-    justify-content: space-around;
-   
+  display: flex;
+  justify-content: space-around;
 }
 
 .header-shop {
-    display: flex;
-    justify-content: flex-end;
-    align-items: center;
-   
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
 }
 
 .header-nav-list {
-    padding: 20px;
-    display: flex;
-    gap: 40px;
-    white-space: nowrap;
+  padding: 20px;
+  display: flex;
+  gap: 40px;
+  white-space: nowrap;
 
-    .link {
-        color: #011468;
-        text-decoration: none;
-    }
+  .link {
+    color: #011468;
+    text-decoration: none;
+  }
 }
 
-.header-nav-list a:hover{
-    opacity: 0.7;
+.header-nav-list a:hover {
+  opacity: 0.7;
 }
 
 .shop-button {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    white-space: nowrap; /*evita que el texto se divida en varias líneas*/
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  white-space: nowrap; /*evita que el texto se divida en varias líneas*/
 
-    background-color: #011468;
-    color: #FFFFFF;
-    padding: 10px 15px;
-    border-radius: 999px;
-    font-size: 12px;
-
+  background-color: #011468;
+  color: #ffffff;
+  padding: 10px 15px;
+  border-radius: 999px;
+  font-size: 12px;
 }
 
 .shop-button:hover {
-    background-color: #3F4F96;
-    cursor: pointer;
+  background-color: #3f4f96;
+  cursor: pointer;
 }
-
-
-

@@ -1,8 +1,6 @@
-import LogoLoop from "../ui/LogoLoop/LogoLoop"; // Asegúrate de que la ruta a tu UI es correcta
+import LogoLoop from "../ui/LogoLoop/LogoLoop";
 
 const CarruselMarcas = () => {
-  // Aquí defines los datos.
-  // TIP: Asegúrate de que estas imágenes existan en tu carpeta "public/logosColaboradores/"
   const imageLogos = [
     {
       src: "/logosColaboradores/elpozo.png",
@@ -52,44 +50,59 @@ const CarruselMarcas = () => {
   ];
 
   return (
-    <section className="py-16 md:py-24 bg-white border-t border-gray-100">
+    <section className="py-16 md:py-24 bg-white border-t border-gray-100 overflow-hidden">
       <div className="container mx-auto px-4 mb-12 text-center">
-        {/* Título */}
-        <h2 className="text-3xl md:text-4xl font-bold text-[#011468] mb-4">
+        {/* Título: Aparece con un fundido desde arriba */}
+        <h2
+          data-aos="fade-down"
+          className="text-3xl md:text-4xl font-bold text-[#011468] mb-4"
+        >
           Marcas con las que trabajamos
         </h2>
 
-        {/* Descripción */}
-        <p className="text-lg text-gray-600 max-w-2xl mx-auto leading-relaxed">
+        {/* Descripción: Aparece justo después */}
+        <p
+          data-aos="fade-up"
+          data-aos-delay="200"
+          className="text-lg text-gray-600 max-w-2xl mx-auto leading-relaxed"
+        >
           Colaboramos con los mejores proveedores de alimentación nacional e
           internacional para garantizar la máxima calidad en tu mesa o negocio.
         </p>
       </div>
 
-      {/* --- ZONA DEL CARRUSEL (Usando tu componente LogoLoop) --- */}
+      {/* --- ZONA DEL CARRUSEL --- */}
       <div
+        data-aos="fade-in"
+        data-aos-duration="1500"
+        data-aos-delay="400"
         className="relative w-full overflow-hidden"
         style={{ height: "160px" }}
       >
-        {/* Degradados laterales para suavizar la entrada/salida de logos */}
-        <div className="absolute top-0 left-0 z-10 h-full w-20 bg-gradient-to-r from-white to-transparent pointer-events-none"></div>
-        <div className="absolute top-0 right-0 z-10 h-full w-20 bg-gradient-to-l from-white to-transparent pointer-events-none"></div>
+        {/* Degradados laterales: Fundido suave para los logos */}
+        <div className="absolute top-0 left-0 z-10 h-full w-24 bg-gradient-to-r from-white via-white/80 to-transparent pointer-events-none"></div>
+        <div className="absolute top-0 right-0 z-10 h-full w-24 bg-gradient-to-l from-white via-white/80 to-transparent pointer-events-none"></div>
 
         <LogoLoop
           logos={imageLogos}
-          speed={60} // Un poco más lento para que se lean bien las marcas
+          speed={60}
           direction="left"
-          logoHeight={100} // Altura ajustada para que no sean gigantes
-          gap={80} // Espacio entre logos
-          hoverSpeed={0} // Pausa al pasar el ratón (opcional)
-          scaleOnHover={true} // Efecto zoom bonito
-          fadeOut={false} // Lo controlo manualmente con los divs de arriba
+          logoHeight={100}
+          gap={80}
+          hoverSpeed={0}
+          scaleOnHover={true}
+          fadeOut={false}
           ariaLabel="Nuestros proveedores de confianza"
         />
       </div>
 
-      {/* Cierre */}
-      <div className="text-center mt-8">
+      {/* Cierre: Un pequeño detalle de entrada lateral */}
+      <div
+        className="text-center mt-8"
+        data-aos="fade-left"
+        data-aos-delay="600"
+        data-aos-offset="50"
+      >
         <p className="inline-block text-[#D90414] font-medium italic border-b border-[#D90414]/30 pb-1">
           Y mucho más…
         </p>

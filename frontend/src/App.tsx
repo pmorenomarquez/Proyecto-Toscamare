@@ -1,4 +1,8 @@
 import "./App.css";
+import { useEffect } from "react";
+import AOS from "aos";
+import "aos/dist/aos.css";
+
 import Footer from "./layout/Footer";
 import Header from "./layout/Header";
 import Inicio from "./pages/inicio/Incio";
@@ -6,6 +10,18 @@ import AvisoLegal from "./pages/avisoLegal/AvisoLegal";
 import Cookies from "./pages/cookies/Cookies";
 
 function App() {
+  if ("scrollRestoration" in history) {
+    // eslint-disable-next-line react-hooks/immutability
+    history.scrollRestoration = "manual";
+  }
+  useEffect(() => {
+    AOS.init({
+      duration: 300,
+      once: false,
+      offset: 100,
+    });
+  }, []);
+
   const linksHeader = {
     inicio: "Inicio",
     sobreNosotros: "Sobre Nosotros",
@@ -23,11 +39,13 @@ function App() {
   };
 
   return (
-    <div className="app-container">
+    <>
       <Header links={linksHeader}></Header>
       <Inicio />
       <Footer links={linksFooter}></Footer>
-    </div>
+      <AvisoLegal />
+      <Cookies />
+    </>
   );
 }
 
