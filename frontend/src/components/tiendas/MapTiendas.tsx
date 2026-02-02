@@ -43,7 +43,8 @@ interface MapTiendasProps {
     selectedTienda: any;
 }
 
-function MapTiendas(props: MapTiendasProps) {
+// Componente que usa useMap - DEBE estar dentro de <Map>
+function MapContent({ selectedTienda, locations }: { selectedTienda: any, locations: Poi[] }) {
     const map = useMap();
     const [mapError, setMapError] = useState<string | null>(null);
     const [isLoading, setIsLoading] = useState(true);
@@ -59,23 +60,21 @@ function MapTiendas(props: MapTiendasProps) {
 
             setIsLoading(false);
 
-            if (props.selectedTienda && props.selectedTienda.lat && props.selectedTienda.lng) {
+            if (selectedTienda && selectedTienda.lat && selectedTienda.lng) {
                 map.panTo({
-                    lat: props.selectedTienda.lat,
-                    lng: props.selectedTienda.lng
+                    lat: selectedTienda.lat,
+                    lng: selectedTienda.lng
                 });
+                map.setZoom(15);
             }
         } catch (error) {
             console.error('Error al cargar el mapa:', error);
             setMapError('No pudimos cargar el mapa. Por favor, intenta recargar la página.');
             setIsLoading(false);
         }
-    }, [props.selectedTienda, map]);
+    }, [selectedTienda, map]);
 
     const PoiMarkers = (props: { pois: Poi[] }) => {
-        // const map = useMap();
-        // Si tienes Place IDs de Google Maps para tus tiendas, puedes usarlos aquí
-        // Asocia aquí las URLs de Google Maps de cada tienda para que lleve al panel de empresa
         const poiGoogleMapsUrls: { [key: string]: string } = {
             sede_central: "https://www.google.com/maps/place/Toscamare/@37.2885367,-7.1384086,17z/data=!3m1!4b1!4m6!3m5!1s0xd1032565978d5f7:0xf87f8eb20d911df1!8m2!3d37.2885367!4d-7.1384086!16s%2Fg%2F11b8v9p8bw!18m1!1e1?entry=ttu&g_ep=EgoyMDI2MDEyNi4wIKXMDSoASAFQAw%3D%3D",
             cartaya: "https://www.google.com/maps/place/Toscamare+Cartaya/@37.2847762,-7.1526138,17z/data=!3m1!4b1!4m6!3m5!1s0xd10330d0bae07bb:0x759533e35a6ab16b!8m2!3d37.2847762!4d-7.1526138!16s%2Fg%2F11dx8j9pz1!18m1!1e1?entry=ttu&g_ep=EgoyMDI2MDEyNi4wIKXMDSoASAFQAw%3D%3D",
@@ -145,6 +144,22 @@ function MapTiendas(props: MapTiendasProps) {
         );
     }
 
+    // Error State
+    if (mapError) {
+        return (
+            <section className='map'>
+                <div className='map-error'>
+                    <div className='error-icon'>⚠️</div>
+                    <h3>Error al cargar el mapa</h3>
+                    <p>{mapError}</p>
+                    <button onClick={() => window.location.reload()} className='retry-button'>
+                        Recargar página
+                    </button>
+                </div>
+            </section>
+        );
+    }
+
     // Loading State
     if (isLoading) {
         return (
@@ -157,6 +172,15 @@ function MapTiendas(props: MapTiendasProps) {
     }
 
     return (
+        <>
+            <PoiMarkers pois={locations} />
+        </>
+    );
+}
+
+// Componente principal
+function MapTiendas(props: MapTiendasProps) {
+    return (
         <section className='map'>
             <Map
                 defaultZoom={13}
@@ -165,14 +189,10 @@ function MapTiendas(props: MapTiendasProps) {
                 onCameraChanged={(ev: MapCameraChangedEvent) =>
                     console.log('camera changed:', ev.detail.center, 'zoom:', ev.detail.zoom)
                 }>
-                <PoiMarkers pois={locations} />
+                <MapContent selectedTienda={props.selectedTienda} locations={locations} />
             </Map>
         </section>
-    )
+    );
 }
-
-
-
-
 
 export default MapTiendas
