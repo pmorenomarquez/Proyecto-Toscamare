@@ -5,7 +5,7 @@ import "aos/dist/aos.css";
 
 import Footer from "./layout/Footer";
 import Header from "./layout/Header";
-import Inicio from "./pages/inicio/Incio";
+import Inicio from "./pages/inicio/Inicio";
 import AvisoLegal from "./pages/avisoLegal/AvisoLegal";
 import Cookies from "./pages/cookies/Cookies";
 import Tiendas from "./pages/tiendas/Tiendas";
