@@ -3,12 +3,16 @@ import { useEffect } from "react";
 import AOS from "aos";
 import "aos/dist/aos.css";
 
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+
 import Footer from "./layout/Footer";
 import Header from "./layout/Header";
+
 import Inicio from "./pages/inicio/Inicio";
 import AvisoLegal from "./pages/avisoLegal/AvisoLegal";
 import Cookies from "./pages/cookies/Cookies";
 import Tiendas from "./pages/tiendas/Tiendas";
+import Contacto from "./pages/Contacto";
 
 function App() {
   if ("scrollRestoration" in history) {
@@ -24,29 +28,38 @@ function App() {
   }, []);
 
   const linksHeader = {
-    inicio: "Inicio",
-    sobreNosotros: "Sobre Nosotros",
-    tiendas: "Tiendas",
-    contacto: "Contacto",
+    inicio: "/",
+    sobreNosotros: "/sobre-nosotros",
+    tiendas: "/tiendas",
+    contacto: "/contacto",
   };
 
   const linksFooter = {
-    inicio: "Inicio",
-    sobreNosotros: "Sobre Nosotros",
-    tiendas: "Tiendas",
-    contacto: "Contacto",
-    avisoLegal: "Aviso Legal",
-    cookies: "Cookies",
+    inicio: "/",
+    sobreNosotros: "/sobre-nosotros",
+    tiendas: "/tiendas",
+    contacto: "/contacto",
+    avisoLegal: "/aviso-legal",
+    cookies: "/cookies",
   };
+
 
   return (
     <>
-      <Header links={linksHeader}></Header>
-      <Inicio />
-      <Footer links={linksFooter}></Footer>
-      <AvisoLegal />
-      <Cookies />
-      <Tiendas />
+      <BrowserRouter>
+        <Header links={linksHeader} />
+
+        <Routes>
+          <Route path="/" element={<Inicio />} />
+
+          <Route path="/tiendas" element={<Tiendas />} />
+          <Route path="/contacto" element={<Contacto />} />
+          <Route path="/aviso-legal" element={<AvisoLegal />} />
+          <Route path="/cookies" element={<Cookies />} />
+        </Routes>
+
+        <Footer links={linksFooter} />
+      </BrowserRouter>
     </>
   );
 }

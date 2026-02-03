@@ -1,5 +1,7 @@
 import "./Footer.css";
 import { FaPhone, FaEnvelope, FaFacebookF, FaInstagram } from "react-icons/fa";
+import { Link } from "react-router-dom";
+
 
 /* Definición de las props que recibe el componente Footer */
 interface FooterProps {
@@ -9,7 +11,7 @@ interface FooterProps {
     tiendas: string;
     contacto: string;
     avisoLegal: string;
-    cookies?: string;
+    cookies: string;
   };
 }
 
@@ -23,7 +25,7 @@ function Footer({ links }: FooterProps) {
         <div className="footer-info">
           <img
             className="footer-logo"
-            src="/public/logoToscamare/icono-toscamare-blanco.webp"
+            src="/logoToscamare/icono-toscamare-blanco.webp"
             alt="Toscamare "
           />
           <p className="txt-footer">
@@ -35,23 +37,24 @@ function Footer({ links }: FooterProps) {
         <div className="footer-menu">
           <p className="titulo-footer">Enlaces de interés</p>
           <p>
-            <a href="">{links.inicio}</a>
+            <Link to={links.inicio}>Inicio</Link>
           </p>
           <p>
-            <a href="">{links.sobreNosotros}</a>
+            <Link to={links.sobreNosotros}>Sobre Nosotros</Link>
           </p>
           <p>
-            <a href="">{links.tiendas}</a>
+            <Link to={links.tiendas}>Tiendas</Link>
           </p>
           <p>
-            <a href="">{links.contacto}</a>
+            <Link to={links.contacto}>Contacto</Link>
           </p>
           <p>
-            <a href="">{links.avisoLegal}</a>
+            <Link to={links.avisoLegal}>Aviso Legal</Link>
           </p>
           <p>
-            <a href="">{links.cookies}</a>
+            <Link to={links.cookies}>Cookies</Link>
           </p>
+
         </div>
 
         <div className="footer-contact">
@@ -92,17 +95,6 @@ function Footer({ links }: FooterProps) {
         <span>
           {new Date().getFullYear()} © Toscamare - Todos los derechos reservados
         </span>
-
-        {/*
-        <div className="footer-social">
-          <a href="https://www.facebook.com/toscanocongelados" aria-label="Facebook">
-            <FaFacebookF />
-          </a>
-          <a href="https://www.instagram.com/toscamare" aria-label="Instagram">
-            <FaInstagram />
-          </a>
-        </div>
-        */}
       </div>
     </footer>
   );
