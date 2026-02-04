@@ -18,7 +18,7 @@ const AvisoLegal = () => {
   return (
     <div className="bg-white min-h-screen font-nunito text-slate-800 antialiased">
       {/* HEADER: Mantenemos el título a la izquierda */}
-      <header className="pt-24 pb-16 px-6 max-w-6xl mx-auto">
+      <header className="pt-24 pb-16 px-6 max-w-6xl">
         <motion.span
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
