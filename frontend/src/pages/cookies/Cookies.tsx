@@ -16,8 +16,7 @@ const layoutVariants = {
 const Cookies = () => {
   return (
     <div className="bg-white min-h-screen font-nunito text-slate-800 antialiased">
-      {/* HEADER: Siguiendo el mismo estilo lateral */}
-      <header className="pt-24 pb-16 px-6 max-w-6xl mx-auto">
+      <header className="pt-24 pb-16 px-6 max-w-6xl">
         <motion.span
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
@@ -30,9 +29,8 @@ const Cookies = () => {
         </h1>
       </header>
 
-      <main className="max-w-6xl mx-auto px-6 py-20">
-        {/* El margen izquierdo (ml) para que no choque con el título lateral */}
-        <div className="flex flex-col gap-32 md:ml-40 lg:ml-60">
+      <main className="max-w-6xl mx-auto px-6">
+        <div className="flex flex-col gap-15 md:ml-10 lg:ml-60">
           {/* 1. USO DE COOKIES - PUNTO AZUL */}
           <motion.section
             variants={layoutVariants}
@@ -63,9 +61,9 @@ const Cookies = () => {
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true }}
-            className="relative border-t border-slate-50 pt-20"
+            className="relative"
           >
-            <div className="absolute -left-12 top-27 h-5 w-5 rounded-full bg-brand-marino shadow-lg"></div>
+            <div className="absolute -left-12 top-7 h-5 w-5 rounded-full bg-brand-marino shadow-lg"></div>
             <ManejoCookies />
           </motion.section>
         </div>

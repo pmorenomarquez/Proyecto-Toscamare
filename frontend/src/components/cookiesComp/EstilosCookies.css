@@ -3,7 +3,6 @@
   width: 100%;
   margin: 0;
   padding-top: 1rem;
-  text-align: center;
   border: none; /* Aseguramos alineación a la izquierda */
   margin-bottom: 1rem;
 }
@@ -12,7 +11,7 @@
   font-size: 2.25rem !important;
   font-weight: 900 !important;
   color: #011468 !important;
-  margin-bottom: 2rem;
+  margin-bottom: 1rem;
   text-transform: uppercase;
   letter-spacing: -0.03em;
   line-height: 1.1;
