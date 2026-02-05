@@ -1,9 +1,8 @@
-name: Sync Fork with Upstream
+name: Sync Fork on Push
 
 on:
-  schedule:
-    - cron: '*/30 * * * *'  # Cada 30 minutos
-  workflow_dispatch:
+  push:
+    branches: [main]
 
 jobs:
   sync:
@@ -18,13 +17,7 @@ jobs:
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git config user.name "github-actions[bot]"
 
-      - name: Add upstream remote
-        run: git remote add upstream https://github.com/adriangonzalezchico-sketch/Proyecto-Toscamare.git
-
-      - name: Fetch upstream main
-        run: git fetch upstream main
-
-      - name: Merge and push
+      - name: Push to fork
         run: |
-          git merge upstream/main --no-edit || true
-          git push origin main
+          git remote add fork https://$FORK_SYNC_TOKEN@github.com/pmorenomarquez/Proyecto-Toscamare.git
+          git push fork main
