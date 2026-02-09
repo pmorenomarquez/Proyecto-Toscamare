@@ -88,7 +88,6 @@ app.post('/api/contact', async (req, res) => {
             }
             .header {
               background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-              color: white;
               padding: 40px 30px;
               text-align: center;
             }
