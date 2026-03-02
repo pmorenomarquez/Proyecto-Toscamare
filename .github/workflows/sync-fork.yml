@@ -1,4 +1,4 @@
-name: Sync Fork on Push
+﻿name: Sync Fork on Push
 
 on:
   push:
