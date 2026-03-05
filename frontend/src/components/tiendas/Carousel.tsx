@@ -53,11 +53,11 @@ const DEFAULT_ITEMS: CarouselItem[] = [
     { id: 6, title: 'SAN JUAN DEL PUERTO', telefono: '645752089', image: sanJuanImg },
     { id: 7, title: 'LA PALMA DEL CONDADO', telefono: '959401288', image: laPalmaImg },
     { id: 8, title: 'GIBRALEÓN', telefono: '677579534', image: gibraleonImg },
-    { id: 9, title: 'AYAMONTE 1', telefono: '959392221', image: ayamonte1Img },
+    { id: 9, title: 'AYAMONTE 1', telefono: '690825692', image: ayamonte1Img },
     { id: 10, title: 'AYAMONTE 2', telefono: '685431338', image: ayamonte2Img },
     { id: 11, title: 'HUELVA 1', telefono: '626883856', image: huelva1Img },
-    { id: 12, title: 'HUELVA 2', telefono: '959392221', image: huelva2Img },
-    { id: 13, title: 'HUELVA 3', telefono: '959392221', image: huelva3Img },
+    { id: 12, title: 'HUELVA 2', telefono: '685431328', image: huelva2Img },
+    { id: 13, title: 'HUELVA 3', telefono: '645753812', image: huelva3Img },
     { id: 14, title: 'PALOS DE LA FRONTERA', telefono: '959102794', image: palosImg },
     { id: 15, title: 'ALMONTE', telefono: '959392221', image: almonteImg },
     { id: 16, title: 'BONARES', telefono: '605195677', image: bonaresImg },
@@ -65,7 +65,7 @@ const DEFAULT_ITEMS: CarouselItem[] = [
     { id: 18, title: 'MOGUER', telefono: '635609135', image: moguerImg },
     { id: 19, title: 'ROCIANA DEL CONDADO', telefono: '645752092', image: rocianaImg },
     { id: 20, title: 'SAN BARTOLOMÉ DE LA TORRE', telefono: '620065629', image: sanBartolomeImg },
-    { id: 21, title: 'VALVERDE', telefono: '959392221', image: valverdeImg },
+    { id: 21, title: 'VALVERDE', telefono: '690825687', image: valverdeImg },
 ];
 
 const DRAG_BUFFER = 0;
