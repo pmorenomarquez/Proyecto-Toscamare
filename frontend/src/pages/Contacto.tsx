@@ -5,7 +5,7 @@ import ContactFaq from "@/components/contact/contact-faq"
 
 export default function ContactoPage() {
   return (
-    <main className="min-h-screen bg-background">
+    <main className="min-h-screen bg-background pt-24 md:pt-32">
       {/* Hero Section */}
       <section className="border-b border-border/50 bg-muted/30">
         <div className="container mx-auto px-4 py-16 md:py-24">
