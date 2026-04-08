@@ -239,6 +239,8 @@ export default function ProductsPage() {
     } else {
       localStorage.removeItem("toscamare_pedido_pendiente");
     }
+    // Notificar al resto de la app (Header)
+    window.dispatchEvent(new Event("cart-updated"));
   }, [selectedProducts]);
 
   const handleUpdateCart = (productName: string, delta: number) => {
@@ -300,33 +302,31 @@ export default function ProductsPage() {
               </p>
             </div>
 
-          <div data-aos="fade-up" data-aos-delay="300">
             <ProductSearch onSearch={handleSearch} />
           </div>
+        
+          {loading ? (
+            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8 animate-pulse">
+              {[...Array(6)].map((_, i) => (
+                <div key={i} className="bg-gray-200 rounded-2xl h-96"></div>
+              ))}
+            </div>
+          ) : (
+            <>
+              <ProductGrid 
+                products={currentItems} 
+                onSelect={setSelectedProduct} 
+                selectedProducts={selectedProducts}
+                onUpdateCart={handleUpdateCart}
+              />
+              <Pagination
+                currentPage={currentPage}
+                totalPages={totalPages}
+                onPageChange={setCurrentPage}
+              />
+            </>
+          )}
         </div>
-
-        {loading ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8 animate-pulse">
-            {[...Array(6)].map((_, i) => (
-              <div key={i} className="bg-gray-200 rounded-2xl h-96"></div>
-            ))}
-          </div>
-        ) : (
-          <>
-            <ProductGrid 
-              products={currentItems} 
-              onSelect={setSelectedProduct} 
-              selectedProducts={selectedProducts}
-              onUpdateCart={handleUpdateCart}
-            />
-            <Pagination
-              currentPage={currentPage}
-              totalPages={totalPages}
-              onPageChange={setCurrentPage}
-            />
-          </>
-        )}
-      </div>
       }
     >
       <ScrollToTopButton />

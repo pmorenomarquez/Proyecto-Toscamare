@@ -1,11 +1,13 @@
 "use client";
 
+import { Link } from "react-router-dom";
 import React, { useState, useEffect } from "react";
+import { createPortal } from "react-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
-import { CheckCircle, Search, X, Package } from "lucide-react";
+import { CheckCircle, Search, X, Package, AlertTriangle, Trash2 } from "lucide-react";
 import Papa from "papaparse";
 
 interface Product {
@@ -32,6 +34,7 @@ export default function ContactForm() {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedProducts, setSelectedProducts] = useState<SelectedProduct[]>([]);
   const [showResults, setShowResults] = useState(false);
+  const [showClearConfirm, setShowClearConfirm] = useState(false);
 
   // 1. Cargar productos seleccionados del localStorage al inicio
   useEffect(() => {
@@ -51,6 +54,18 @@ export default function ContactForm() {
       localStorage.setItem("toscamare_pedido_pendiente", JSON.stringify(selectedProducts));
     } else {
       localStorage.removeItem("toscamare_pedido_pendiente");
+    }
+    // Notificar al resto de la app (Header)
+    window.dispatchEvent(new Event("cart-updated"));
+
+    // SCROLL AL RESUMEN SI VIENE CON EL HASH
+    if (selectedProducts.length > 0 && window.location.hash === "#pedido-resumen") {
+      setTimeout(() => {
+        const element = document.getElementById("pedido-resumen");
+        if (element) {
+          element.scrollIntoView({ behavior: "smooth" });
+        }
+      }, 300); // Un poco más de tiempo para asegurar el render
     }
   }, [selectedProducts]);
 
@@ -105,6 +120,11 @@ export default function ContactForm() {
 
   const handleRemoveProduct = (productName: string) => {
     setSelectedProducts(selectedProducts.filter(p => p.name !== productName));
+  };
+
+  const handleClearAll = () => {
+    setSelectedProducts([]);
+    setShowClearConfirm(false);
   };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -204,163 +224,186 @@ export default function ContactForm() {
   }
 
   return (
-    <div className="space-y-8 animate-in fade-in duration-500">
-      {/* Selector de tipo de formulario */}
-      <div className="flex p-1 bg-muted rounded-xl gap-1">
-        <button
-          type="button"
-          onClick={() => setFormType("pedidos")}
-          className={`flex-1 py-3 px-4 rounded-lg text-sm font-bold transition-all duration-500 cursor-pointer ${
-            formType === "pedidos"
-              ? "bg-white text-[#011468] shadow-sm scale-[1.02]"
-              : "text-muted-foreground hover:text-foreground hover:bg-white/50"
-          }`}
-        >
-          Hacer un pedido
-        </button>
-        <button
-          type="button"
-          onClick={() => setFormType("contacto")}
-          className={`flex-1 py-3 px-4 rounded-lg text-sm font-bold transition-all duration-500 cursor-pointer ${
-            formType === "contacto"
-              ? "bg-white text-[#011468] shadow-sm scale-[1.02]"
-              : "text-muted-foreground hover:text-foreground hover:bg-white/50"
-          }`}
-        >
-          Contacto general
-        </button>
-      </div>
-
-      <form onSubmit={handleSubmit} className="space-y-6">
-        {/* Honeypot */}
-        <input
-          type="text"
-          name="website"
-          className="absolute -left-[9999px] h-0 w-0 opacity-0"
-          tabIndex={-1}
-          autoComplete="off"
-          aria-hidden="true"
-        />
-
-        <div className="space-y-2">
-          <Label htmlFor="fullName">Nombre completo</Label>
-          <Input id="fullName" name="fullName" placeholder="Tu nombre y apellidos" required />
+    <>
+      <div className="space-y-8 animate-in fade-in duration-500">
+        {/* Selector de tipo de formulario */}
+        <div className="flex p-1 bg-muted rounded-xl gap-1 w-full max-w-sm mx-auto">
+          <button
+            type="button"
+            onClick={() => setFormType("pedidos")}
+            className={`flex-1 py-3 px-4 rounded-lg text-sm font-bold transition-all duration-500 cursor-pointer ${
+              formType === "pedidos"
+                ? "bg-white text-[#011468] shadow-sm scale-[1.02]"
+                : "text-muted-foreground hover:text-foreground hover:bg-white/50"
+            }`}
+          >
+            Hacer un pedido
+          </button>
+          <button
+            type="button"
+            onClick={() => setFormType("contacto")}
+            className={`flex-1 py-3 px-4 rounded-lg text-sm font-bold transition-all duration-500 cursor-pointer ${
+              formType === "contacto"
+                ? "bg-white text-[#011468] shadow-sm scale-[1.02]"
+                : "text-muted-foreground hover:text-foreground hover:bg-white/50"
+            }`}
+          >
+            Contacto general
+          </button>
         </div>
 
-        <div className="space-y-2">
-          <Label htmlFor="companyName">Nombre comercial (opcional)</Label>
-          <Input id="companyName" name="companyName" placeholder="Nombre de tu negocio" />
-        </div>
-
-        <div className="grid gap-6 md:grid-cols-2">
-          <div className="space-y-2">
-            <Label htmlFor="email">Email</Label>
-            <Input id="email" name="email" type="email" placeholder="tu@email.com" required />
-          </div>
-          <div className="space-y-2">
-            <Label htmlFor="phone">Teléfono de contacto (opcional)</Label>
-            <Input id="phone" name="phone" type="tel" placeholder="600 000 000" />
-          </div>
-        </div>
-
-
-
-        <div className="space-y-2">
-          <Label htmlFor="message">
-            {formType === "pedidos" ? "Notas adicionales o instrucciones" : "Mensaje"}
-          </Label>
-          <Textarea 
-            id="message" 
-            name="message" 
-            rows={4} 
-            placeholder={formType === "pedidos" ? "Ej: Reparto por la mañana..." : "Escribe aquí tu duda..."} 
-            required 
+        <form onSubmit={handleSubmit} className="space-y-6">
+          {/* Honeypot */}
+          <input
+            type="text"
+            name="website"
+            className="absolute -left-[9999px] h-0 w-0 opacity-0"
+            tabIndex={-1}
+            autoComplete="off"
+            aria-hidden="true"
           />
-        </div>
 
-        {/* BUSCADOR DE PRODUCTOS / ASUNTO (Movido aquí) */}
-        <div className="space-y-4 pt-4 border-t border-muted-foreground/10">
-          <Label htmlFor="productSearch">
-            {formType === "pedidos" ? "Añade más productos a tu pedido" : "Asunto de tu consulta"}
-          </Label>
-          
-          {formType === "pedidos" ? (
-            <div className="space-y-4">
-              <div className="relative group">
-                <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground group-focus-within:text-[#011468] transition-colors" />
-                <Input 
-                  id="productSearch"
-                  value={searchQuery}
-                  onChange={(e) => {
-                    setSearchQuery(e.target.value);
-                    setShowResults(true);
-                  }}
-                  onFocus={() => setShowResults(true)}
-                  className="pl-11 h-12 rounded-xl border-muted-foreground/20 focus:border-[#011468] focus:ring-0"
-                  placeholder="Busca aquí productos para añadir..."
-                />
-
-                {/* Resultados de búsqueda */}
-                {showResults && searchQuery.length > 1 && (
-                  <div className="absolute z-50 w-full mt-2 bg-white border border-border rounded-xl shadow-2xl overflow-hidden animate-in slide-in-from-top-2 duration-300">
-                    <div className="max-h-[300px] overflow-y-auto">
-                      {filteredProducts.length > 0 ? (
-                        filteredProducts.map((p, idx) => (
-                          <button
-                            key={idx}
-                            type="button"
-                            onClick={() => handleSelectProduct(p.name)}
-                            className="w-full text-left px-5 py-3.5 hover:bg-muted flex flex-col gap-0.5 border-b last:border-0 border-border/50 transition-colors"
-                          >
-                            <span className="font-bold text-sm text-[#011468]">{p.name}</span>
-                            <span className="text-[10px] uppercase tracking-wider font-semibold text-muted-foreground">{p.category}</span>
-                          </button>
-                        ))
-                      ) : (
-                        <div className="px-5 py-4 text-sm text-muted-foreground italic">No se encontraron productos</div>
-                      )}
-                    </div>
-                    <button 
-                      type="button"
-                      onClick={() => setShowResults(false)}
-                      className="w-full py-2 bg-muted/30 text-[10px] text-center font-bold tracking-widest text-[#011468] hover:bg-muted transition-colors uppercase"
-                    >
-                      Cerrar buscador
-                    </button>
-                  </div>
-                )}
-              </div>
-            </div>
-          ) : (
-            <Input id="subject" name="subject" placeholder="Escribe el motivo aquí..." required />
-          )}
-        </div>
-
-        {error && (
-          <div className="rounded-lg bg-destructive/10 p-4 text-sm text-destructive">
-            {error}
+          <div className="space-y-2">
+            <Label htmlFor="fullName">Nombre completo</Label>
+            <Input id="fullName" name="fullName" placeholder="Tu nombre y apellidos" required />
           </div>
-        )}
 
-        {/* LISTA DE PRODUCTOS SELECCIONADOS (Con altura máxima y scroll) */}
-        {formType === "pedidos" && selectedProducts.length > 0 && (
-          <div className="pt-6 border-t border-dashed border-muted-foreground/30 animate-in slide-in-from-bottom-4 duration-700">
-            <h4 className="text-xs font-black text-[#011468]/50 uppercase tracking-[0.2em] mb-4 flex items-center gap-2">
-              <Package className="h-3 w-3" /> Resumen de tu pedido seleccionado
-            </h4>
-            <div className="grid gap-3 max-h-[400px] overflow-y-auto pr-2 custom-scrollbar">
-              {selectedProducts.map((p) => (
-                <div key={p.name} className="flex items-center justify-between p-3 bg-white rounded-xl border border-[#011468]/10 shadow-sm hover:shadow-md transition-all">
-                  <div className="flex items-center gap-3">
-                    <div className="bg-[#011468]/5 p-2 rounded-lg">
-                      <Package className="h-4 w-4 text-[#011468]" />
+          <div className="space-y-2">
+            <Label htmlFor="companyName">Nombre comercial (opcional)</Label>
+            <Input id="companyName" name="companyName" placeholder="Nombre de tu negocio" />
+          </div>
+
+          <div className="grid gap-6 md:grid-cols-2">
+            <div className="space-y-2">
+              <Label htmlFor="email">Email</Label>
+              <Input id="email" name="email" type="email" placeholder="tu@email.com" required />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="phone">Teléfono de contacto (opcional)</Label>
+              <Input id="phone" name="phone" type="tel" placeholder="600 000 000" />
+            </div>
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="message">
+              {formType === "pedidos" ? "Notas adicionales o instrucciones" : "Mensaje"}
+            </Label>
+            <Textarea 
+              id="message" 
+              name="message" 
+              rows={4} 
+              placeholder={formType === "pedidos" ? "Ej: Reparto por la mañana..." : "Escribe aquí tu duda..."} 
+              required 
+            />
+          </div>
+
+          {/* BUSCADOR DE PRODUCTOS / ASUNTO */}
+          <div className="space-y-4 pt-4 border-t border-muted-foreground/10">
+            <div className="flex items-center justify-between gap-4">
+              <Label htmlFor="productSearch">
+                {formType === "pedidos" ? "Añade más productos a tu pedido" : "Asunto de tu consulta"}
+              </Label>
+              {formType === "pedidos" && (
+                <Link 
+                  to="/productos" 
+                  className="text-[10px] font-black text-[#011468]/50 hover:text-[#D90414] transition-all flex items-center gap-1 group whitespace-nowrap tracking-widest hover:translate-x-1"
+                >
+                  VOLVER AL CATÁLOGO 
+                  <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                  </svg>
+                </Link>
+              )}
+            </div>
+            
+            {formType === "pedidos" ? (
+              <div className="space-y-4">
+                <div className="relative group">
+                  <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground group-focus-within:text-[#011468] transition-colors" />
+                  <Input 
+                    id="productSearch"
+                    value={searchQuery}
+                    onChange={(e) => {
+                      setSearchQuery(e.target.value);
+                      setShowResults(true);
+                    }}
+                    onFocus={() => setShowResults(true)}
+                    className="pl-11 h-12 rounded-xl border-muted-foreground/20 focus:border-[#011468] focus:ring-0"
+                    placeholder="Busca aquí productos para añadir..."
+                  />
+
+                  {/* Resultados de búsqueda */}
+                  {showResults && searchQuery.length > 1 && (
+                    <div className="absolute z-50 w-full mt-2 bg-white border border-border rounded-xl shadow-2xl overflow-hidden animate-in slide-in-from-top-2 duration-300">
+                      <div className="max-h-[300px] overflow-y-auto">
+                        {filteredProducts.length > 0 ? (
+                          filteredProducts.map((p, idx) => (
+                            <button
+                              key={idx}
+                              type="button"
+                              onClick={() => handleSelectProduct(p.name)}
+                              className="w-full text-left px-5 py-3.5 hover:bg-muted flex flex-col gap-0.5 border-b last:border-0 border-border/50 transition-colors"
+                            >
+                              <span className="font-bold text-sm text-[#011468]">{p.name}</span>
+                              <span className="text-[10px] uppercase tracking-wider font-semibold text-muted-foreground">{p.category}</span>
+                            </button>
+                          ))
+                        ) : (
+                          <div className="px-5 py-4 text-sm text-muted-foreground italic">No se encontraron productos</div>
+                        )}
+                      </div>
+                      <button 
+                        type="button"
+                        onClick={() => setShowResults(false)}
+                        className="w-full py-2 bg-muted/30 text-[10px] text-center font-bold tracking-widest text-[#011468] hover:bg-muted transition-colors uppercase"
+                      >
+                        Cerrar buscador
+                      </button>
                     </div>
-                    <span className="font-bold text-sm text-[#011468] truncate max-w-[150px] md:max-w-[250px]">
-                      {p.name}
-                    </span>
-                  </div>
-                  
-                  <div className="flex items-center gap-4 bg-muted/50 p-1 rounded-lg">
+                  )}
+                </div>
+              </div>
+            ) : (
+              <Input id="subject" name="subject" placeholder="Escribe el motivo aquí..." required />
+            )}
+          </div>
+
+          {error && (
+            <div className="rounded-lg bg-destructive/10 p-4 text-sm text-destructive">
+              {error}
+            </div>
+          )}
+
+          {/* LISTA DE PRODUCTOS SELECCIONADOS */}
+          {formType === "pedidos" && selectedProducts.length > 0 && (
+            <div id="pedido-resumen" className="pt-6 border-t border-dashed border-muted-foreground/30 animate-in slide-in-from-bottom-4 duration-700 scroll-mt-24">
+              <div className="flex items-center justify-between mb-4">
+                <h4 className="text-xs font-black text-[#011468]/50 uppercase tracking-[0.2em] flex items-center gap-2">
+                  <Package className="h-3 w-3" /> Resumen de tu pedido seleccionado
+                </h4>
+                <button
+                  type="button"
+                  onClick={() => setShowClearConfirm(true)}
+                  className="text-[10px] font-bold text-red-500 hover:text-red-700 transition-all duration-300 uppercase tracking-widest flex items-center gap-1.5 px-3 py-1.5 rounded-full hover:bg-red-50 cursor-pointer border border-transparent hover:border-red-200"
+                >
+                  <Trash2 className="h-3.5 w-3.5" />
+                  Borrar todo
+                </button>
+              </div>
+
+              <div className="grid gap-3 max-h-[400px] overflow-y-auto pr-2 custom-scrollbar">
+                {selectedProducts.map((p) => (
+                  <div key={p.name} className="flex items-center justify-between p-3 bg-white rounded-xl border border-[#011468]/10 shadow-sm hover:shadow-md transition-all">
+                    <div className="flex items-center gap-3">
+                      <div className="bg-[#011468]/5 p-2 rounded-lg">
+                        <Package className="h-4 w-4 text-[#011468]" />
+                      </div>
+                      <span className="font-bold text-sm text-[#011468] truncate max-w-[150px] md:max-w-[250px]">
+                        {p.name}
+                      </span>
+                    </div>
+                    
+                    <div className="flex items-center gap-4 bg-muted/50 p-1 rounded-lg">
                       <div className="flex items-center gap-1">
                         <button
                           type="button"
@@ -392,36 +435,77 @@ export default function ContactForm() {
                           +
                         </button>
                       </div>
-                    <button
-                      type="button"
-                      onClick={() => handleRemoveProduct(p.name)}
-                      className="p-1.5 hover:text-red-500 transition-colors cursor-pointer"
-                      title="Eliminar producto"
-                    >
-                      <X className="h-4 w-4" />
-                    </button>
+                      <button
+                        type="button"
+                        onClick={() => handleRemoveProduct(p.name)}
+                        className="p-1.5 hover:text-red-500 transition-colors cursor-pointer"
+                        title="Eliminar producto"
+                      >
+                        <X className="h-4 w-4" />
+                      </button>
+                    </div>
                   </div>
-                </div>
-              ))}
+                ))}
+              </div>
+            </div>
+          )}
+
+          <div className="pt-6">
+            <Button
+              type="submit"
+              className={`w-full font-black text-lg h-14 transition-all duration-500 cursor-pointer ${isSubmitting ? "" : "hover:scale-[1.01] shadow-xl bg-[#011468] hover:bg-[#D90414] hover:rotate-[0.5deg]"}`}
+              size="lg"
+              disabled={isSubmitting}
+            >
+              {isSubmitting 
+                ? "Enviando..." 
+                : formType === "pedidos" 
+                  ? "CONFIRMAR PEDIDO" 
+                  : "ENVIAR MENSAJE"}
+            </Button>
+          </div>
+        </form>
+      </div>
+
+      {/* Modal de confirmación personalizado - Usamos Portal para que sea independiente del contenedor del formulario */}
+      {showClearConfirm && createPortal(
+        <div 
+          className="fixed inset-0 z-[999] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in duration-300 cursor-default"
+          onClick={() => setShowClearConfirm(false)}
+        >
+          <div 
+            className="bg-white rounded-3xl p-8 max-w-sm w-full shadow-2xl border border-border scale-up-center cursor-default"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="flex flex-col items-center text-center">
+              <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mb-6 text-red-600">
+                <AlertTriangle className="h-8 w-8" />
+              </div>
+              <h3 className="text-xl font-bold text-[#011468] mb-2">¿Vaciar pedido?</h3>
+              <p className="text-gray-500 text-sm mb-8">
+                Esta acción eliminará todos los productos que has añadido. No podrás deshacerlo.
+              </p>
+              <div className="flex flex-col w-full gap-3">
+                <button
+                  type="button"
+                  onClick={handleClearAll}
+                  className="w-full py-3.5 bg-red-600 text-white rounded-xl font-black text-sm hover:bg-red-700 transition-all active:scale-95 shadow-lg shadow-red-200 cursor-pointer"
+                >
+                  SÍ, BORRAR TODO
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setShowClearConfirm(false)}
+                  className="w-full py-3.5 bg-gray-100 text-gray-600 rounded-xl font-bold text-sm hover:bg-gray-200 transition-all active:scale-95 cursor-pointer"
+                >
+                  CANCELAR
+                </button>
+              </div>
             </div>
           </div>
-        )}
-
-        <div className="pt-6">
-          <Button
-            type="submit"
-            className={`w-full font-black text-lg h-14 transition-all duration-500 cursor-pointer ${isSubmitting ? "" : "hover:scale-[1.01] shadow-xl bg-[#011468] hover:bg-[#D90414] hover:rotate-[0.5deg]"}`}
-            size="lg"
-            disabled={isSubmitting}
-          >
-            {isSubmitting 
-              ? "Enviando..." 
-              : formType === "pedidos" 
-                ? "CONFIRMAR PEDIDO" 
-                : "ENVIAR MENSAJE"}
-          </Button>
-        </div>
-      </form>
-    </div>
+        </div>,
+        document.body
+      )}
+    </>
   );
 }
