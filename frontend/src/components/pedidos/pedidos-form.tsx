@@ -38,11 +38,9 @@ interface SelectedProduct {
   note?: string;
 }
 
-const API_URL = "https://proyecto-toscamare.onrender.com";
-
 const UNITS = ["Uds", "Kg", "gr"];
 
-// Se elimina la definición local de API_URL
+const API_URL = "https://proyecto-toscamare.onrender.com";
 
 export default function PedidosForm() {
   const [isSubmitting, setIsSubmitting] = useState(false);

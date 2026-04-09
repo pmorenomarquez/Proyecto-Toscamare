@@ -14,6 +14,7 @@ import {
   Building2,
   Send,
 } from "lucide-react";
+
 const API_URL = "https://proyecto-toscamare.onrender.com";
 
 export default function ContactForm() {

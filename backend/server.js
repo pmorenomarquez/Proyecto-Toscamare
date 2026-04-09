@@ -1,7 +1,7 @@
-import express from "express";
-import cors from "cors";
-import dotenv from "dotenv";
-import { sendContactEmail } from "./services/mailService.js";
+import express from 'express';
+import cors from 'cors';
+import dotenv from 'dotenv';
+import { sendContactEmail } from './services/mailService.js';
 
 dotenv.config();
 
@@ -23,56 +23,49 @@ app.use(express.urlencoded({ extended: true }));
 // app.use('/api/contact', contactLimiter);
 
 // Log uncaught errors
-process.on("uncaughtException", (err) => {
-  console.error("Uncaught exception:", err?.stack || err);
+process.on('uncaughtException', (err) => {
+  console.error('Uncaught exception:', err?.stack || err);
 });
-process.on("unhandledRejection", (err) => {
-  console.error("Unhandled rejection:", err?.stack || err);
+process.on('unhandledRejection', (err) => {
+  console.error('Unhandled rejection:', err?.stack || err);
 });
 
 // --- Utilidades ---
 
 function sanitize(str) {
-  if (typeof str !== "string") return "";
-  return str.replace(/[<>]/g, "").trim();
+  if (typeof str !== 'string') return '';
+  return str.replace(/[<>]/g, '').trim();
 }
 
 function validateSubmission(body, startTime) {
   // Anti-bot: honeypot
   if (body.website) {
-    return { valid: false, error: "Error de validación" };
+    return { valid: false, error: 'Error de validación' };
   }
   // Anti-bot: tiempo mínimo
   const timeElapsed = Date.now() - startTime;
   if (timeElapsed < 1000) {
-    return {
-      valid: false,
-      error: "Por favor, tómate un momento para completar el formulario",
-    };
+    return { valid: false, error: 'Por favor, tómate un momento para completar el formulario' };
   }
   return { valid: true };
 }
 
 // --- Endpoints ---
 
-app.post("/api/contact", async (req, res) => {
+app.post('/api/contact', async (req, res) => {
   const startTime = req.body.formLoadTime || Date.now();
 
   try {
-    console.log(
-      `[REQ] Incoming ${req.body.formType || "unknown"} request from ${req.body.email || "unknown"}`,
-    );
-    console.log("[DEBUG] Full Body:", JSON.stringify(req.body, null, 2));
+    console.log(`[REQ] Incoming ${req.body.formType || 'unknown'} request from ${req.body.email || 'unknown'}`);
+    console.log('[DEBUG] Full Body:', JSON.stringify(req.body, null, 2));
 
     const validation = validateSubmission(req.body, startTime);
     if (!validation.valid) {
       console.warn(`[VALIDATION FAILED] ${validation.error} | IP: ${req.ip}`);
-      return res
-        .status(400)
-        .json({ success: false, message: validation.error });
+      return res.status(400).json({ success: false, message: validation.error });
     }
 
-    const formType = req.body.formType || "contacto";
+    const formType = req.body.formType || 'contacto';
     const selectedProducts = req.body.selectedProducts || [];
     const fullName = sanitize(req.body.fullName);
     const companyName = sanitize(req.body.companyName);
@@ -86,46 +79,44 @@ app.post("/api/contact", async (req, res) => {
     if (!fullName || !email || !subject || !message) {
       return res.status(400).json({
         success: false,
-        message: "Todos los campos obligatorios son requeridos",
+        message: 'Todos los campos obligatorios son requeridos',
       });
     }
 
-    const info = await sendContactEmail({
-      formType,
-      fullName,
-      companyName,
-      email,
-      phone,
-      subject,
-      message,
+    const info = await sendContactEmail({ 
+      formType, 
+      fullName, 
+      companyName, 
+      email, 
+      phone, 
+      subject, 
+      message, 
       selectedProducts,
       deliveryMethod,
-      selectedStore,
+      selectedStore
     });
 
-    console.log(
-      `[OK] Email (${formType}) enviado de: ${email} | MessageId: ${info.messageId}`,
-    );
+    console.log(`[OK] Email (${formType}) enviado de: ${email} | MessageId: ${info.messageId}`);
 
-    res.json({ success: true, message: "Mensaje enviado correctamente" });
+    res.json({ success: true, message: 'Mensaje enviado correctamente' });
   } catch (error) {
-    console.error("[ERROR] al enviar email:", error);
+    console.error('[ERROR] al enviar email:', error);
     res.status(500).json({
       success: false,
-      message: "Error al enviar el mensaje. Por favor, intenta de nuevo.",
+      message: 'Error al enviar el mensaje. Por favor, intenta de nuevo.',
     });
   }
 });
 
-app.get("/health", (req, res) => {
+app.get('/health', (req, res) => {
   res.json({
-    status: "ok",
-    service: "Contact Form API - Toscamare",
-    departments: ["pedidos", "contacto"],
+    status: 'ok',
+    service: 'Contact Form API - Toscamare',
+    departments: ['pedidos', 'contacto']
   });
 });
 
-app.get("/", (req, res) => {
+app.get('/', (req, res) => {
   res.send(`
     <!DOCTYPE html>
     <html>
@@ -158,7 +149,7 @@ app.get("/", (req, res) => {
   `);
 });
 
-app.listen(PORT, '0.0.0.0', () => {
+app.listen(PORT, () => {
   console.log(`
   =============================================
     CONTACT FORM API - TOSCAMARE (Nodemailer)
