@@ -32,16 +32,18 @@ export async function sendContactEmail({
   }
 
   const transporter = nodemailer.createTransport({
-    service: 'gmail',
+    host: "smtp.gmail.com",
+    port: 465,
+    secure: true,
     auth: {
       user: gmailUser,
       pass: gmailPass,
     },
+    family: 4, // Forzar IPv4 para Gmail también
+    connectionTimeout: 10000, // 10 segundos
   });
 
-  console.log(
-    `[MAIL] Enviando desde Gmail (${gmailUser}) hacia ${destinationEmail}...`
-  );
+  console.log(`[MAIL] Preparando envío: ${gmailUser} -> ${destinationEmail}`);
   
   const mailSubject = isPedido
     ? `NUEVO PEDIDO: ${fullName}`
