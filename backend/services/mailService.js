@@ -25,15 +25,10 @@ export async function sendContactEmail({
     ? process.env.PASSWORD_PEDIDOS
     : process.env.PASSWORD_CONTACTO;
 
-  if (!senderEmail || !senderPass) {
-    console.error(`[CRITICAL] Faltan variables de entorno para ${formType}`);
-    throw new Error("Configuración de correo incompleta en el servidor.");
-  }
-
   const transporter = nodemailer.createTransport({
-    host: "smtp.ionos.com",
-    port: 465,
-    secure: true,
+    host: "smtp.ionos.es",
+    port: 587,
+    secure: false,
     auth: {
       user: senderEmail,
       pass: senderPass,
@@ -41,16 +36,17 @@ export async function sendContactEmail({
     tls: {
       rejectUnauthorized: false,
     },
-    connectionTimeout: 10000,
   });
 
+  console.log(
+    `[MAIL] Attempting to send ${formType} email from ${senderEmail} to ${senderEmail}...`,
+  );
+  
   const mailSubject = isPedido
     ? `NUEVO PEDIDO: ${fullName}`
     : `Nuevo mensaje de contacto: ${subject}`;
 
-  console.log(`[MAIL] Intentando envío directo...`);
-  
-  return transporter.sendMail({
+  const info = await transporter.sendMail({
     from: `"Toscamare" <${senderEmail}>`,
     to: senderEmail,
     replyTo: email,
@@ -80,6 +76,8 @@ export async function sendContactEmail({
       selectedStore,
     }),
   });
+
+  return info;
 }
 
 function buildPlainText({
