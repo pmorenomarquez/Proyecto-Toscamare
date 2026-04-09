@@ -41,8 +41,19 @@ export async function sendContactEmail({
     tls: {
       rejectUnauthorized: false,
     },
-    connectionTimeout: 15000,
+    connectionTimeout: 10000,
+    greetingTimeout: 10000,
   });
+
+  // Verificar conexión antes de enviar
+  try {
+    console.log(`[SMTP] Verificando conexión para ${senderEmail}...`);
+    await transporter.verify();
+    console.log(`[SMTP] Conexión verificada con éxito.`);
+  } catch (verifyError) {
+    console.error(`[SMTP ERROR] Fallo al conectar con Ionos:`, verifyError);
+    throw new Error(`Error de conexión con el servidor de correo: ${verifyError.message}`);
+  }
 
   console.log(
     `[MAIL] Attempting to send ${formType} email from ${senderEmail} to ${senderEmail}...`,
