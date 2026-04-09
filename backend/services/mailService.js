@@ -32,8 +32,8 @@ export async function sendContactEmail({
 
   const transporter = nodemailer.createTransport({
     host: "smtp.ionos.es",
-    port: 587,
-    secure: false,
+    port: 465,
+    secure: true,
     auth: {
       user: senderEmail,
       pass: senderPass,
