@@ -30,7 +30,7 @@ interface SelectedProduct {
 const UNITS = ["Uds", "Kg", "gr"];
 
 const API_URL =
-  import.meta.env.VITE_API_URL_PRODUCCION || "http://localhost:3001";
+  "https://proyecto-toscamare.onrender.com"; /* Cambia esto por tu URL de producción */
 
 interface Props {
   formType: "pedidos" | "contacto";
