@@ -38,9 +38,11 @@ interface SelectedProduct {
   note?: string;
 }
 
+import { API_URL } from "../../config/api.config";
+
 const UNITS = ["Uds", "Kg", "gr"];
 
-const API_URL = "http://localhost:3001";
+// Se elimina la definición local de API_URL
 
 export default function PedidosForm() {
   const [isSubmitting, setIsSubmitting] = useState(false);

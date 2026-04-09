@@ -15,8 +15,7 @@ import {
   Send,
 } from "lucide-react";
 
-const API_URL =
-  import.meta.env.VITE_API_URL_PRODUCCION || "http://localhost:3001";
+import { API_URL } from "../../config/api.config";
 
 export default function ContactForm() {
   const [isSubmitting, setIsSubmitting] = useState(false);
