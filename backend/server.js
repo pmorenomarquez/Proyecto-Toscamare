@@ -8,6 +8,14 @@ dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 3001;
 
+// Verificación de configuración en el arranque
+console.log('--- Comprobación de Configuración (Render) ---');
+console.log('EMAIL_PEDIDOS:', process.env.EMAIL_PEDIDOS ? '✅ Presente' : '❌ FALTA');
+console.log('PASSWORD_PEDIDOS:', process.env.PASSWORD_PEDIDOS ? '✅ Presente' : '❌ FALTA');
+console.log('EMAIL_CONTACTO:', process.env.EMAIL_CONTACTO ? '✅ Presente' : '❌ FALTA');
+console.log('PASSWORD_CONTACTO:', process.env.PASSWORD_CONTACTO ? '✅ Presente' : '❌ FALTA');
+console.log('-------------------------------------------');
+
 // Middlewares
 app.use(cors());
 app.use(express.json());
