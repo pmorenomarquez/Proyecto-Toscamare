@@ -10,6 +10,7 @@ interface MainLayoutProps {
     tiendas: string;
     contacto: string;
     productos: string;
+    pedidos: string;
   };
   linksFooter: {
     inicio: string;
@@ -19,6 +20,7 @@ interface MainLayoutProps {
     avisoLegal: string;
     cookies: string;
     productos: string;
+    pedidos: string;
   };
 }
 

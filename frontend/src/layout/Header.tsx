@@ -11,6 +11,7 @@ interface HeaderProps {
     tiendas: string;
     contacto: string;
     productos: string;
+    pedidos: string;
   };
 }
 
