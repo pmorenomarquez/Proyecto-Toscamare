@@ -40,7 +40,7 @@ interface SelectedProduct {
 
 const UNITS = ["Uds", "Kg", "gr"];
 
-const API_URL = "http://localhost:3001";
+const API_URL = import.meta.env.VITE_API_URL || "";
 
 export default function PedidosForm() {
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -266,7 +266,7 @@ export default function PedidosForm() {
     };
 
     try {
-      const response = await fetch(`${API_URL}/api/contact`, {
+      const response = await fetch(`${API_URL}/api/contact.php`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data),

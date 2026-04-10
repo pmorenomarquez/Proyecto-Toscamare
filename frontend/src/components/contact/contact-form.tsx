@@ -15,7 +15,7 @@ import {
   Send,
 } from "lucide-react";
 
-const API_URL = "http://localhost:3001";
+const API_URL = import.meta.env.VITE_API_URL || "";
 
 export default function ContactForm() {
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -60,7 +60,7 @@ export default function ContactForm() {
     };
 
     try {
-      const response = await fetch(`${API_URL}/api/contact`, {
+      const response = await fetch(`${API_URL}/api/contact.php`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data),
