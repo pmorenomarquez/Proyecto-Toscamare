@@ -1,6 +1,10 @@
 <IfModule mod_rewrite.c>
   RewriteEngine On
   RewriteBase /
+
+  # Redirigir antiguas URLs con prefijo /es/ a la versión sin prefijo (SEO)
+  RewriteRule ^es/(.*)$ /$1 [R=301,L]
+  RewriteRule ^es$ / [R=301,L]
   
   # Si la petición es para un archivo o directorio que existe, úsalo
   RewriteCond %{REQUEST_FILENAME} !-f

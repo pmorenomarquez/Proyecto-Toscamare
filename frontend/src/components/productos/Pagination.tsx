@@ -116,7 +116,7 @@ export const Pagination = ({
       {/* 🚀 SALTO DIRECTO (INPUT) */}
       <form
         onSubmit={handleJump}
-        className="flex items-center gap-3 pl-6 border-l border-gray-200"
+        className="flex items-center gap-3 md:pl-6 md:border-l border-gray-200"
       >
         <span className="text-sm text-gray-500 whitespace-nowrap">
           Ir a la página

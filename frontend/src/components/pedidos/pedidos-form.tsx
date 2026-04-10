@@ -22,7 +22,11 @@ import {
   Send,
   Truck,
   Store,
+  LayoutGrid,
+  X,
+  ListFilter
 } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
 import Papa from "papaparse";
 import { tiendasUbicaciones } from "../../data/tiendasUbicaciones";
 
@@ -56,6 +60,8 @@ export default function PedidosForm() {
   );
   const [showResults, setShowResults] = useState(false);
   const [showClearConfirm, setShowClearConfirm] = useState(false);
+  const [selectedCategory, setSelectedCategory] = useState("TODOS");
+  const [isCategoryDrawerOpen, setIsCategoryDrawerOpen] = useState(false);
 
   // Opciones de entrega
   const [deliveryMethod, setDeliveryMethod] = useState<"domicilio" | "tienda">(
@@ -113,10 +119,12 @@ export default function PedidosForm() {
     fetchProducts();
   }, []);
 
+  const categories = ["TODOS", ...Array.from(new Set(allProducts.map(p => p.category.toUpperCase()).filter(Boolean))).sort()];
+
   const filteredProducts = allProducts
     .filter(
-      (p) =>
-        p.name
+      (p) => {
+        const matchesSearch = p.name
           .toLowerCase()
           .normalize("NFD")
           .replace(/[\u0300-\u036f]/g, "")
@@ -125,7 +133,12 @@ export default function PedidosForm() {
               .toLowerCase()
               .normalize("NFD")
               .replace(/[\u0300-\u036f]/g, ""),
-          ) && !selectedProducts.some((sp) => sp.name === p.name),
+          );
+        
+        const matchesCategory = selectedCategory === "TODOS" || p.category.toUpperCase() === selectedCategory;
+        
+        return matchesSearch && matchesCategory && !selectedProducts.some((sp) => sp.name === p.name);
+      }
     )
     .slice(0, 8);
 
@@ -544,6 +557,78 @@ export default function PedidosForm() {
               </p>
             </div>
           )}
+
+          {/* Botón Flotante de Categorías para Móvil en Pedidos */}
+          <button
+            type="button"
+            onClick={() => setIsCategoryDrawerOpen(true)}
+            className="md:hidden fixed bottom-8 left-1/2 -translate-x-1/2 z-40 bg-[#011468] text-white px-8 py-4 rounded-full shadow-[0_10px_30px_rgba(1,20,104,0.4)] flex items-center gap-3 font-black text-sm border border-white/10 active:scale-95 transition-all animate-in slide-in-from-bottom-10"
+          >
+            <LayoutGrid size={20} className="text-[#D90414]" />
+            {selectedCategory === "TODOS" ? "FILTRAR POR CATEGORÍA" : selectedCategory}
+          </button>
+
+          {/* Drawer de Categorías */}
+          <AnimatePresence>
+            {isCategoryDrawerOpen && (
+              <>
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  onClick={() => setIsCategoryDrawerOpen(false)}
+                  className="fixed inset-0 bg-black/40 backdrop-blur-sm z-50 md:hidden"
+                />
+                <motion.div
+                  initial={{ y: "100%" }}
+                  animate={{ y: 0 }}
+                  exit={{ y: "100%" }}
+                  transition={{ type: "spring", damping: 25, stiffness: 200 }}
+                  className="fixed bottom-0 left-0 right-0 bg-white rounded-t-[3rem] p-8 z-[60] md:hidden max-h-[80vh] flex flex-col shadow-[-10px_0_40px_rgba(0,0,0,0.3)]"
+                >
+                  <div className="w-16 h-1.5 bg-gray-100 rounded-full mx-auto mb-8" onClick={() => setIsCategoryDrawerOpen(false)} />
+                  <div className="flex items-center justify-between mb-8">
+                    <h3 className="text-2xl font-black text-[#011468] flex items-center gap-3 italic">
+                      <ListFilter className="text-[#D90414]" size={28} />
+                      CATEGORÍAS
+                    </h3>
+                    <button 
+                      type="button"
+                      onClick={() => setIsCategoryDrawerOpen(false)}
+                      className="p-3 bg-gray-50 rounded-full text-gray-400 hover:text-[#D90414] transition-colors"
+                    >
+                      <X size={24} />
+                    </button>
+                  </div>
+                  
+                  <div className="overflow-y-auto pr-2 flex-1 pb-12 space-y-2 grid grid-cols-1 gap-2">
+                    {categories.map((cat) => (
+                      <button
+                        key={cat}
+                        type="button"
+                        onClick={() => {
+                          setSelectedCategory(cat);
+                          setIsCategoryDrawerOpen(false);
+                          setShowResults(true);
+                          document.getElementById("productSearch")?.focus();
+                        }}
+                        className={`w-full p-5 rounded-2xl text-left font-black text-sm transition-all border ${
+                          selectedCategory === cat
+                            ? "bg-[#011468] text-white border-[#011468] shadow-lg translate-x-1"
+                            : "bg-gray-50 text-[#011468] border-gray-100 hover:bg-white hover:border-[#011468]/20"
+                        }`}
+                      >
+                        <div className="flex items-center justify-between">
+                          <span className="uppercase tracking-widest">{cat}</span>
+                          {selectedCategory === cat && <div className="w-2 h-2 bg-[#D90414] rounded-full animate-pulse" />}
+                        </div>
+                      </button>
+                    ))}
+                  </div>
+                </motion.div>
+              </>
+            )}
+          </AnimatePresence>
 
           {/* Lista de productos seleccionados */}
           {selectedProducts.length > 0 ? (

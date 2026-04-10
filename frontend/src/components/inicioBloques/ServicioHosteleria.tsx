@@ -103,7 +103,7 @@ const ServicioHosteleria = () => {
               className="flex flex-col sm:flex-row gap-6 items-center sm:items-start"
             >
               <Link
-                to="/contacto"
+                to="/pedidos"
                 className="inline-flex items-center justify-center px-10 py-4 bg-[#D90414] hover:bg-[#b00310] text-white font-bold rounded-full transition-all duration-300 shadow-xl hover:shadow-2xl transform hover:-translate-y-1 active:scale-95"
               >
                 <svg

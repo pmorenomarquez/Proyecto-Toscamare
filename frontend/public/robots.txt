@@ -1,0 +1,8 @@
+User-agent: *
+Allow: /
+
+# Sitemap
+Sitemap: https://cialtoscamare.es/sitemap.xml
+
+# No indexar la carpeta de la API para seguridad
+Disallow: /api/

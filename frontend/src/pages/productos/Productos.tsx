@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect, useMemo, useRef } from "react";
 import Papa from "papaparse";
 import { ProductLayout } from "../../components/productos/ProductLayout";
 import { ProductFilters } from "../../components/productos/ProductFilters";
@@ -8,6 +8,8 @@ import { Pagination } from "../../components/productos/Pagination";
 import { ProductHero } from "../../components/productos/ProductHero";
 import { ScrollToTopButton } from "../../components/ui/ScrollToTopButton";
 import { ProductModal } from "../../components/productos/ProductModal";
+import { ListFilter, X, LayoutGrid } from "lucide-react";
+import { AnimatePresence, motion } from "framer-motion";
 // Importación masiva de imágenes de categorías
 import ahumadosImg from "../../assets/imagenes_categorias/Ahumados y salazones.webp";
 import carnesImg from "../../assets/imagenes_categorias/Carnes.webp";
@@ -50,6 +52,7 @@ export default function ProductsPage() {
   const [search, setSearch] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
+  const [isFiltersOpen, setIsFiltersOpen] = useState(false);
   const itemsPerPage = 30;
 
   useEffect(() => {
@@ -261,6 +264,24 @@ export default function ProductsPage() {
     });
   };
 
+  const [showFloatingBtn, setShowFloatingBtn] = useState(false);
+  const staticFiltersRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      // Mostramos el botón flotante solo si hemos bajado más de 800px 
+      // (ajustable según la altura del Hero + Filtros estáticos)
+      if (window.innerWidth < 1024) { // Solo en móvil
+        setShowFloatingBtn(window.scrollY > 700);
+      } else {
+        setShowFloatingBtn(false);
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
   const handleCategoryChange = (cat: string) => {
     setCategory(cat);
     setCurrentPage(1);
@@ -275,13 +296,76 @@ export default function ProductsPage() {
     <ProductLayout
       intro={<ProductHero />}
       filters={
-        <ProductFilters
-          activeCategory={category}
-          setCategory={handleCategoryChange}
-        />
+        <div ref={staticFiltersRef} className="sticky top-32">
+          <ProductFilters
+            activeCategory={category}
+            setCategory={handleCategoryChange}
+          />
+        </div>
       }
       content={
         <div className="space-y-6">
+          {/* Botón Flotante de Categorías para Móvil */}
+          <AnimatePresence>
+            {showFloatingBtn && (
+              <motion.button
+                initial={{ y: 100, x: "-50%", opacity: 0 }}
+                animate={{ y: 0, x: "-50%", opacity: 1 }}
+                exit={{ y: 100, x: "-50%", opacity: 0 }}
+                onClick={() => setIsFiltersOpen(true)}
+                className="lg:hidden fixed bottom-3 left-1/2 z-40 bg-[#002B61] text-white px-6 py-3 rounded-full shadow-2xl flex items-center gap-2.5 font-black text-xs border border-white/10 active:scale-95 transition-all"
+              >
+                <LayoutGrid size={16} className="text-[#D4AF37]" />
+                CATEGORÍAS
+              </motion.button>
+            )}
+          </AnimatePresence>
+
+          {/* Drawer de Categorías para Móvil */}
+          <AnimatePresence>
+            {isFiltersOpen && (
+              <>
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  onClick={() => setIsFiltersOpen(false)}
+                  className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 lg:hidden"
+                />
+                <motion.div
+                  initial={{ y: "100%" }}
+                  animate={{ y: 0 }}
+                  exit={{ y: "100%" }}
+                  transition={{ type: "spring", damping: 30, stiffness: 300 }}
+                  className="fixed inset-x-0 -bottom-1 bg-white rounded-t-[2.5rem] px-6 pt-8 pb-4 z-[70] lg:hidden max-h-[72vh] flex flex-col shadow-[0_-30px_70px_rgba(0,0,0,0.3)]"
+                >
+                  <div className="w-10 h-1.5 bg-gray-200 rounded-full mx-auto mb-6 opacity-50" onClick={() => setIsFiltersOpen(false)} />
+                  <div className="flex items-center justify-between mb-8">
+                    <h3 className="text-xl font-black text-[#002B61] flex items-center gap-3 italic">
+                      <ListFilter className="text-[#D4AF37]" />
+                      FILTRAR POR
+                    </h3>
+                    <button 
+                      onClick={() => setIsFiltersOpen(false)}
+                      className="p-2 bg-gray-100 rounded-full text-gray-400 hover:text-red-500 transition-colors"
+                    >
+                      <X size={20} />
+                    </button>
+                  </div>
+                  
+                  <div className="overflow-y-auto pr-2 custom-scrollbar flex-1 pb-2">
+                    <ProductFilters
+                      activeCategory={category}
+                      setCategory={(cat) => {
+                        handleCategoryChange(cat);
+                        setIsFiltersOpen(false);
+                      }}
+                    />
+                  </div>
+                </motion.div>
+              </>
+            )}
+          </AnimatePresence>
           <div className="flex flex-col gap-4">
             {/* CONTADOR DINÁMICO MEJORADO */}
             <div 
@@ -331,7 +415,7 @@ export default function ProductsPage() {
         </div>
       }
     >
-      <ScrollToTopButton />
+      {!isFiltersOpen && <ScrollToTopButton />}
       <ProductModal 
         product={selectedProduct} 
         onClose={() => setSelectedProduct(null)} 

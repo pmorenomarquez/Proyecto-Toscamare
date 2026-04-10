@@ -18,7 +18,7 @@ interface Props {
   onUpdateCart: (productName: string, quantity: number, unit: string) => void;
 }
 
-const UNITS = ["Uds", "Kg", "gr"];
+const UNITS = ["Kg", "Uds"];
 
 export const ProductCard = ({ product, onSelect, index = 0, quantity, unit, onUpdateCart }: Props) => {
   return (
@@ -104,7 +104,7 @@ export const ProductCard = ({ product, onSelect, index = 0, quantity, unit, onUp
               <button
                 onClick={(e) => {
                   e.stopPropagation();
-                  onUpdateCart(product.name, 1, "Uds");
+                  onUpdateCart(product.name, 1, "Kg");
                 }}
                 className="w-full py-3.5 bg-[#011468] text-white rounded-xl font-black text-[10px] uppercase tracking-[0.15em] flex items-center justify-center gap-2 hover:bg-[#D4AF37] active:scale-95 transition-all shadow-lg shadow-blue-900/10 cursor-pointer"
               >

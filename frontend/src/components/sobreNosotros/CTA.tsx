@@ -27,7 +27,7 @@ const CTA = () => {
             <div className="flex flex-col items-center gap-4 w-full px-4">
               {/* Botón de Contacto Adaptable */}
               <Link
-                to="/contacto"
+                to="/pedidos"
                 className="bg-white text-blue-900 
                px-8 py-4 sm:px-10 sm:py-5 
                rounded-full font-bold 
@@ -47,13 +47,12 @@ const CTA = () => {
                     strokeLinecap="round"
                     strokeLinejoin="round"
                     strokeWidth={2}
-                    d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"
+                    d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"
                   />
                 </svg>
 
                 <span className="whitespace-nowrap">
-                  Contactar
-                  <span className="hidden md:inline"> con nosotros</span>
+                  Hacer pedido
                 </span>
               </Link>
 

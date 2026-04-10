@@ -48,6 +48,7 @@ function App() {
     tiendas: "/tiendas",
     contacto: "/contacto",
     productos: "/productos",
+    pedidos: "/pedidos",
   };
 
   const linksFooter = {
@@ -58,6 +59,7 @@ function App() {
     avisoLegal: "/aviso-legal",
     cookies: "/cookies",
     productos: "/productos",
+    pedidos: "/pedidos",
   };
 
   return (
