@@ -66,9 +66,27 @@ Para probar la web en tu ordenador, abre la terminal en la carpeta `/frontend` y
 4. Añádela a las rutas: `<Route path="/nueva-pagina" element={<NuevaPagina />} />`
 5. Añade un enlace en el `Header.tsx` apuntando a `/nueva-pagina`.
 
-### ¿Cómo cambiar imágenes o el logo?
-*   **Logo principal:** Está guardado en `frontend/public/logoToscamare/`.
-*   **Imágenes generales:** Están en `frontend/src/assets/`. Reemplaza el archivo manteniendo el mismo nombre o importa el nuevo archivo en el componente React que lo necesite.
+### ¿Cómo cambiar un texto de la web (Horarios, Teléfonos, Textos informativos)?
+No necesitas saber programar. Sigue estos pasos usando el programa VS Code:
+1. Pon el ratón sobre la **lupa** que hay en la barra izquierda de VS Code (o pulsa `Ctrl + Mayús + F`).
+2. En el buscador que se abre, escribe EXACTAMENTE el texto que quieres cambiar (por ejemplo: `8:00 - 15:00`).
+3. Abajo te saldrá una lista con los archivos donde aparece ese texto. Haz clic en uno de ellos.
+4. Verás el texto escrito entre comillas o etiquetas (ej: `<div>8:00 - 15:00</div>`). Borra el texto viejo, escribe el nuevo con cuidado de no borrar los símbolos de alrededor, y guarda pulsando **`Ctrl + S`**. ¡Listo!
+
+### ¿Cómo cambiar las Imágenes del Inicio, Sobre Nosotros o el Logo?
+Para cambiar cualquier foto de estas secciones ¡no tienes que tocar código! Solo hacer un cambiazo de archivos:
+1. Entra a la carpeta de tu ordenador donde están las fotos de la web: `Proyecto-Toscamare/frontend/src/assets/`.
+2. Ahí dentro verás otras carpetas (`imagenes_home`, `fotos_sobre_nosotros`, etc.). Entra y busca la foto que quieres cambiar y fíjate en su **nombre exacto** y **formato** (por ejemplo: `hero-inicio.jpg`).
+3. Coge tu foto nueva y ponle exactamente ese mismo nombre: `hero-inicio.jpg`.
+4. Arrastra tu foto nueva a la carpeta y dale a **Reemplazar**. La página cogerá la nueva foto automáticamente.
+*Nota:* El logo principal está guardado en otra ruta diferente: `frontend/public/logoToscamare/`. Sigue el mismo proceso de reemplazar para cambiarlo.
+
+### ¿Cómo cambiar las Imágenes de las Categorías de Productos?
+Al igual que las imágenes de arriba, los productos no hace falta programarlos, cogen sus fotos automáticamente a partir del nombre de su categoría en el Excel.
+1. Entra a la carpeta `frontend/src/assets/imagenes_categorias/`.
+2. Verás fotos llamadas exactamente como tus categorías (ej: `Pescados.jpg`, `Carnes.jpg`).
+3. Si quieres cambiar la foto de los pescados, coge tu nueva foto, llámala `Pescados.jpg`, arrástrala a esa carpeta y dale a Reemplazar.
+4. ¡Si añades una categoría nueva en tu Excel, asegúrate de meter aquí una foto con ese mismo nombre para que no salga en blanco!
 
 ---
 
